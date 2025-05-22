@@ -68,17 +68,20 @@
   function changeCity() {
     const input = document.getElementById("cityInput").value.trim();
     if (input) {
-      // Reset chart
+      currentCity = input; // Update current city!
       if (tempChart) {
         tempChart.destroy();
         tempChart = null;
       }
-      currentCity = input;
       fetchWeather(currentCity);
     }
   }
 
-  // Auto refresh setiap 10 saat
+  // Initial fetch
   fetchWeather(currentCity);
-  setInterval(() => fetchWeather(currentCity), 10000);
+
+  // Auto update every 10 seconds for the selected city
+  setInterval(() => {
+    fetchWeather(currentCity);
+  }, 10000);
 </script>
