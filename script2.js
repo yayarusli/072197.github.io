@@ -9,7 +9,7 @@ async function getNews() {
 
   container.innerHTML = <p style="text-align:center;">Loading news articles...</p>;
 
-  const apiKey = "70e87a45d7b24ef594b30a358741327d";
+  const apiKey = "4a33b21f36a64a8bb5ed37940042ed55";
   const newsApiUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&apiKey=${apiKey}&pageSize=9&sortBy=publishedAt`;
 
   try {
