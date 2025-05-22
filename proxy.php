@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 
-$apiKey = 'fe17749c3e942e70e9ace6165e10de19';
+$apiKey = '4a33b21f36a64a8bb5ed37940042ed55';
 
 if (!isset($_GET['q']) || empty($_GET['q'])) {
     echo json_encode(['status' => 'error', 'message' => 'Missing query parameter']);
