@@ -1,5 +1,5 @@
-const API_KEY = '4a33b21f36a64a8bb5ed37940042ed55'; 
-const BASE_URL = 'https://newsapi.org/v2/everything';
+const API_KEY = 'fe17749c3e942e70e9ace6165e10de19';
+const BASE_URL = 'https://gnews.io/api/v4/search';
 
 function searchNews() {
   const keyword = document.getElementById("newsKeyword").value.trim();
@@ -11,7 +11,7 @@ function searchNews() {
     return;
   }
 
-  const url = `${BASE_URL}?q=${encodeURIComponent(keyword)}&pageSize=10&sortBy=publishedAt&apiKey=${API_KEY}`;
+  const url = `${BASE_URL}?q=${encodeURIComponent(keyword)}&max=10&lang=en&token=${API_KEY}`;
 
   fetch(url)
     .then(response => {
@@ -19,7 +19,7 @@ function searchNews() {
       return response.json();
     })
     .then(data => {
-      if (data.articles.length === 0) {
+      if (!data.articles || data.articles.length === 0) {
         container.innerHTML = "<p class='text-center'>No news found.</p>";
         return;
       }
@@ -30,7 +30,7 @@ function searchNews() {
 
         card.innerHTML = `
           <div class="card">
-            ${article.urlToImage ? `<img src="${article.urlToImage}" class="card-img-top news-img" alt="News Image">` : ""}
+            ${article.image ? `<img src="${article.image}" class="card-img-top news-img" alt="News Image">` : ""}
             <div class="card-body">
               <h5 class="card-title">${article.title}</h5>
               <p class="card-text">${article.description || "No description available."}</p>
