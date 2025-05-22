@@ -1,8 +1,7 @@
 <?php
 header('Content-Type: application/json');
 
-// Masukkan API key anda di sini (dari https://newsapi.org)
-$apiKey = 'YOUR_NEWSAPI_KEY';
+$apiKey = 'fe17749c3e942e70e9ace6165e10de19';
 
 if (!isset($_GET['q']) || empty($_GET['q'])) {
     echo json_encode(['status' => 'error', 'message' => 'Missing query parameter']);
