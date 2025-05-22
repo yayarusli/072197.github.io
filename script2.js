@@ -1,42 +1,48 @@
-const covidCtx = document.getElementById('covidChart').getContext('2d');
-const dengueCtx = document.getElementById('dengueChart').getContext('2d');
+const API_KEY = '4a33b21f36a64a8bb5ed37940042ed55'; 
+const BASE_URL = 'https://newsapi.org/v2/everything';
 
-// COVID-19 from API
-fetch("https://disease.sh/v3/covid-19/countries/malaysia")
-  .then(res => res.json())
-  .then(data => {
-    new Chart(covidCtx, {
-      type: 'bar',
-      data: {
-        labels: ['Cases', 'Recovered', 'Deaths'],
-        datasets: [{
-          label: 'COVID-19 Stats',
-          data: [data.cases, data.recovered, data.deaths],
-          backgroundColor: ['#f39c12', '#27ae60', '#c0392b']
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false
-      }
-    });
-  });
+function searchNews() {
+  const keyword = document.getElementById("newsKeyword").value.trim();
+  const container = document.getElementById("newsContainer");
+  container.innerHTML = "";
 
-// Static Dengue data (replace with real API if available)
-const dengueData = {
-  labels: ['January', 'February', 'March'],
-  datasets: [{
-    label: 'Dengue Cases',
-    data: [1200, 950, 1300],
-    backgroundColor: '#3498db'
-  }]
-};
-
-new Chart(dengueCtx, {
-  type: 'line',
-  data: dengueData,
-  options: {
-    responsive: true,
-    maintainAspectRatio: false
+  if (!keyword) {
+    alert("Please enter a keyword.");
+    return;
   }
-});
+
+  const url = `${BASE_URL}?q=${encodeURIComponent(keyword)}&pageSize=10&sortBy=publishedAt&apiKey=${API_KEY}`;
+
+  fetch(url)
+    .then(response => {
+      if (!response.ok) throw new Error("News not found.");
+      return response.json();
+    })
+    .then(data => {
+      if (data.articles.length === 0) {
+        container.innerHTML = "<p class='text-center'>No news found.</p>";
+        return;
+      }
+
+      data.articles.forEach(article => {
+        const card = document.createElement("div");
+        card.className = "col-md-6";
+
+        card.innerHTML = `
+          <div class="card">
+            ${article.urlToImage ? `<img src="${article.urlToImage}" class="card-img-top news-img" alt="News Image">` : ""}
+            <div class="card-body">
+              <h5 class="card-title">${article.title}</h5>
+              <p class="card-text">${article.description || "No description available."}</p>
+              <a href="${article.url}" class="btn btn-sm btn-outline-primary" target="_blank">Read more</a>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    })
+    .catch(error => {
+      container.innerHTML = `<p class="text-center text-danger">Error: ${error.message}</p>`;
+    });
+}
