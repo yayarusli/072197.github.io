@@ -1,8 +1,7 @@
 <?php
 header('Content-Type: application/json');
 
-
-$apiKey = '4a33b21f36a64a8bb5ed37940042ed55';
+$apiKey = 'd7aa2d110cac42f59dc97c95b817e193'; // GANTI dengan API Key awak
 
 if (!isset($_GET['q']) || empty($_GET['q'])) {
     echo json_encode(['status' => 'error', 'message' => 'Missing query parameter']);
@@ -11,13 +10,12 @@ if (!isset($_GET['q']) || empty($_GET['q'])) {
 
 $query = urlencode($_GET['q']);
 
-// Tukar everything kepada top-headlines
-$url = "https://newsapi.org/v2/top-headlines?q=$query&pageSize=10&sortBy=publishedAt&language=en&apiKey=$apiKey";
+// Contoh endpoint mediastack
+$url = "http://api.mediastack.com/v1/news?access_key=$apiKey&keywords=$query&languages=en&limit=10";
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
 $response = curl_exec($ch);
 
 if (curl_errno($ch)) {
