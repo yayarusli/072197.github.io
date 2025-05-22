@@ -43,5 +43,4 @@ async function getNews() {
   }
 }
 
-// Attach event listener to search button
 document.getElementById("searchBtn").addEventListener("click", getNews);
