@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json');
 
+
 $apiKey = '4a33b21f36a64a8bb5ed37940042ed55';
 
 if (!isset($_GET['q']) || empty($_GET['q'])) {
@@ -10,7 +11,8 @@ if (!isset($_GET['q']) || empty($_GET['q'])) {
 
 $query = urlencode($_GET['q']);
 
-$url = "https://newsapi.org/v2/everything?q=$query&pageSize=10&sortBy=publishedAt&apiKey=$apiKey";
+// Tukar everything kepada top-headlines
+$url = "https://newsapi.org/v2/top-headlines?q=$query&pageSize=10&sortBy=publishedAt&language=en&apiKey=$apiKey";
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $url);
@@ -18,7 +20,7 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
 $response = curl_exec($ch);
 
-if(curl_errno($ch)) {
+if (curl_errno($ch)) {
     echo json_encode(['status' => 'error', 'message' => curl_error($ch)]);
     curl_close($ch);
     exit;
