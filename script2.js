@@ -17,7 +17,13 @@ async function getNews() {
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
     const json = await response.json();
-    const data = JSON.parse(json.contents);
+
+    let data;
+    try {
+      data = JSON.parse(json.contents);
+    } catch (e) {
+      throw new Error("Failed to parse JSON from API.");
+    }
 
     if (!data.articles || data.articles.length === 0) {
       container.innerHTML = `<p style="text-align:center;">No articles found for "<strong>${query}</strong>".</p>`;
