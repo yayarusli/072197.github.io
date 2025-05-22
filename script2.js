@@ -1,6 +1,3 @@
-const API_KEY = 'fe17749c3e942e70e9ace6165e10de19';
-const BASE_URL = 'https://gnews.io/api/v4/search';
-
 function searchNews() {
   const keyword = document.getElementById("newsKeyword").value.trim();
   const container = document.getElementById("newsContainer");
@@ -11,11 +8,9 @@ function searchNews() {
     return;
   }
 
-  const url = `${BASE_URL}?q=${encodeURIComponent(keyword)}&max=10&lang=en&token=${API_KEY}`;
-
-  fetch(url)
+  fetch(`proxy.php?q=${encodeURIComponent(keyword)}`)
     .then(response => {
-      if (!response.ok) throw new Error("News not found.");
+      if (!response.ok) throw new Error("Failed to fetch news");
       return response.json();
     })
     .then(data => {
@@ -30,11 +25,11 @@ function searchNews() {
 
         card.innerHTML = `
           <div class="card">
-            ${article.image ? `<img src="${article.image}" class="card-img-top news-img" alt="News Image">` : ""}
+            ${article.urlToImage ? `<img src="${article.urlToImage}" class="card-img-top news-img" alt="News Image" />` : ""}
             <div class="card-body">
               <h5 class="card-title">${article.title}</h5>
               <p class="card-text">${article.description || "No description available."}</p>
-              <a href="${article.url}" class="btn btn-sm btn-outline-primary" target="_blank">Read more</a>
+              <a href="${article.url}" class="btn btn-sm btn-outline-primary" target="_blank" rel="noopener noreferrer">Read more</a>
             </div>
           </div>
         `;
