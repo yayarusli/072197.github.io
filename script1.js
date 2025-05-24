@@ -2,7 +2,6 @@
   const API_KEY = "4413dbd78ad72df87c86110a6358db1d";
   let tempChart;
   let currentCity = "Kuala Lumpur";
-
   function buildURL(city) {
     return `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${API_KEY}`;
   }
