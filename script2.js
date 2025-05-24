@@ -9,21 +9,15 @@ async function getNews() {
 
   container.innerHTML = `<p style="text-align:center;">Loading news articles...</p>`;
 
-  const apiKey = "4a33b21f36a64a8bb5ed37940042ed55";
-  const newsApiUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&apiKey=${apiKey}&pageSize=9&sortBy=publishedAt`;
+  const apiKey = "70e87a45d7b24ef594b30a358741327d";
+  const newsApiUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&language=en&apiKey=${apiKey}&pageSize=9&sortBy=publishedAt`;
 
   try {
     const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(newsApiUrl)}`);
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
     const json = await response.json();
-
-    let data;
-    try {
-      data = JSON.parse(json.contents);
-    } catch (e) {
-      throw new Error("Failed to parse JSON from API.");
-    }
+    const data = JSON.parse(json.contents);
 
     if (!data.articles || data.articles.length === 0) {
       container.innerHTML = `<p style="text-align:center;">No articles found for "<strong>${query}</strong>".</p>`;
