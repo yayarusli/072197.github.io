@@ -43,4 +43,12 @@ async function getNews() {
   }
 }
 
+// Run search when clicking the button
 document.getElementById("searchBtn").addEventListener("click", getNews);
+
+// Run search when pressing Enter key
+document.getElementById("newsSearch").addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    getNews();
+  }
+});
