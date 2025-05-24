@@ -1,21 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Weather Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Bootstrap & Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Font & Styles -->
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
 
     body {
       font-family: 'Quicksand', sans-serif;
-      background-color: #fdf6f8;
-      color: #333;
+      background-color: #fce4ec;
+      padding-top: 70px; /* for fixed navbar */
     }
 
-    h2, h5 {
+    .navbar {
+      background-color: #800020;
+    }
+
+    .navbar-brand,
+    .nav-link,
+    .navbar-text {
+      color: white !important;
+    }
+
+    h2,
+    h5 {
       color: #800020;
     }
 
@@ -25,13 +41,21 @@
       box-shadow: 0 4px 12px rgba(128, 0, 32, 0.1);
     }
 
-    .card-title {
+    #temperature,
+    #condition,
+    #humidity,
+    #wind {
+      color: #800020;
       font-weight: 600;
     }
 
-    #temperature, #condition, #humidity, #wind {
-      color: #800020;
-      font-weight: 600;
+    .weather-icon {
+      width: 60px;
+      height: 60px;
+    }
+
+    .hidden {
+      display: none;
     }
 
     canvas {
@@ -39,24 +63,82 @@
       max-height: 300px;
     }
 
-    .hidden {
-      display: none;
+    /* Box background untuk ruang search + info */
+    .search-info-box {
+      background-color: white;
+      border-radius: 16px;
+      padding: 30px 20px 20px 20px;
+      box-shadow: 0 4px 15px rgba(128, 0, 32, 0.15);
+      max-width: 700px;
+      margin: 0 auto 40px auto;
+      text-align: center;
     }
 
-    .weather-icon {
-      width: 60px;
-      height: 60px;
+    .search-info-box input {
+      max-width: 300px;
+      display: inline-block;
+    }
+
+    .search-info-box button {
+      margin-top: 15px;
+    }
+
+    /* Kotak info lokasi */
+    #extraInfoBox {
+      margin-top: 20px;
+      background-color: white;
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 2px 8px rgba(128, 0, 32, 0.1);
+      display: none;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      font-weight: 600;
+      color: #800020;
     }
   </style>
 </head>
 <body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="#">UniSZA Dashboard</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="weather.html">Weather Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="news.html">News Dashboard</a>
+          </li>
+        </ul>
+        <span class="navbar-text fw-semibold">Hi Husna!</span>
+      </div>
+    </div>
+  </nav>
 
+  <!-- Main Content -->
   <div class="container my-5">
-    <!-- Search -->
-    <div class="text-center mb-4">
+    <!-- Search & Info Box in one card background -->
+    <div class="search-info-box">
       <h2 class="mb-3">🌦️ Weather Dashboard</h2>
-      <input type="text" id="cityInput" class="form-control d-inline-block w-50" placeholder="Enter city name (e.g. Tokyo)">
-      <button class="btn btn-primary mt-2" onclick="searchWeather()">Search</button>
+      <input
+        type="text"
+        id="cityInput"
+        class="form-control"
+        placeholder="Enter city name (e.g. Tokyo)"
+      />
+      <button class="btn btn-primary mt-3" onclick="searchWeather()">Search</button>
+
+      <!-- Location info box -->
+      <div id="extraInfoBox"></div>
     </div>
 
     <!-- Weather Info -->
@@ -64,11 +146,19 @@
       <h4 class="text-center mb-3" id="cityTitle"></h4>
       <div class="card mb-4 shadow-sm">
         <div class="card-body text-center">
-          <img id="weatherIcon" class="weather-icon mb-2" src="" alt="Weather Icon">
-          <p class="mb-1">Temperature: <strong><span id="temperature"></span></strong></p>
-          <p class="mb-1">Condition: <strong><span id="condition"></span></strong></p>
-          <p class="mb-1">Humidity: <strong><span id="humidity"></span></strong></p>
-          <p class="mb-0">Wind Speed: <strong><span id="wind"></span></strong></p>
+          <img id="weatherIcon" class="weather-icon mb-2" src="" alt="Weather Icon" />
+          <p class="mb-1">
+            Temperature: <strong><span id="temperature"></span></strong>
+          </p>
+          <p class="mb-1">
+            Condition: <strong><span id="condition"></span></strong>
+          </p>
+          <p class="mb-1">
+            Humidity: <strong><span id="humidity"></span></strong>
+          </p>
+          <p class="mb-0">
+            Wind Speed: <strong><span id="wind"></span></strong>
+          </p>
         </div>
       </div>
 
@@ -76,7 +166,7 @@
       <div class="card shadow-sm">
         <div class="card-body">
           <h5 class="card-title text-center">Live Temperature Updates</h5>
-          <div style="max-height: 300px;">
+          <div style="max-height: 300px">
             <canvas id="tempChart"></canvas>
           </div>
         </div>
@@ -84,6 +174,7 @@
     </div>
   </div>
 
+  <!-- Script -->
   <script>
     const API_KEY = "4413dbd78ad72df87c86110a6358db1d";
     let tempChart;
@@ -91,34 +182,38 @@
     let updateInterval;
 
     function buildURL(city) {
-      return `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${API_KEY}`;
+      return `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(
+        city
+      )}&units=metric&appid=${API_KEY}`;
     }
 
     function updateChart(temp) {
       const timeNow = new Date().toLocaleTimeString();
 
       if (!tempChart) {
-        const ctx = document.getElementById('tempChart').getContext('2d');
+        const ctx = document.getElementById("tempChart").getContext("2d");
         tempChart = new Chart(ctx, {
-          type: 'line',
+          type: "line",
           data: {
             labels: [timeNow],
-            datasets: [{
-              label: 'Temperature (°C)',
-              data: [temp],
-              borderColor: '#800020',
-              backgroundColor: 'rgba(128, 0, 32, 0.1)',
-              fill: true,
-              tension: 0.3
-            }]
+            datasets: [
+              {
+                label: "Temperature (°C)",
+                data: [temp],
+                borderColor: "#800020",
+                backgroundColor: "rgba(128, 0, 32, 0.1)",
+                fill: true,
+                tension: 0.3,
+              },
+            ],
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
-              y: { beginAtZero: false }
-            }
-          }
+              y: { beginAtZero: false },
+            },
+          },
         });
       } else {
         tempChart.data.labels.push(timeNow);
@@ -133,11 +228,11 @@
 
     function fetchWeather(city) {
       fetch(buildURL(city))
-        .then(res => {
+        .then((res) => {
           if (!res.ok) throw new Error("City not found");
           return res.json();
         })
-        .then(data => {
+        .then((data) => {
           const temp = data.main.temp;
           const condition = data.weather[0].description;
           const humidity = data.main.humidity;
@@ -149,14 +244,25 @@
           document.getElementById("condition").textContent = condition;
           document.getElementById("humidity").textContent = `${humidity}%`;
           document.getElementById("wind").textContent = `${wind} m/s`;
-          document.getElementById("cityTitle").textContent = `Weather in ${data.name}, ${data.sys.country}`;
+          document.getElementById(
+            "cityTitle"
+          ).textContent = `Weather in ${data.name}, ${data.sys.country}`;
           document.getElementById("weatherIcon").src = iconUrl;
           document.getElementById("weatherSection").classList.remove("hidden");
 
+          // Update location info box (inside search box)
+          document.getElementById("extraInfoBox").style.display = "block";
+          document.getElementById(
+            "extraInfoBox"
+          ).textContent = `📍 Coordinates: Lat ${data.coord.lat}, Lon ${data.coord.lon}`;
+
           updateChart(temp);
         })
-        .catch(error => {
+        .catch((error) => {
           alert("⚠️ " + error.message);
+          // Clear location info if error
+          document.getElementById("extraInfoBox").style.display = "none";
+          document.getElementById("weatherSection").classList.add("hidden");
         });
     }
 
@@ -166,26 +272,21 @@
 
       currentCity = city;
 
-      // Reset chart
       if (tempChart) {
         tempChart.destroy();
         tempChart = null;
       }
 
-      // Clear previous interval
       if (updateInterval) {
         clearInterval(updateInterval);
       }
 
-      // Fetch data
       fetchWeather(currentCity);
 
-      // Set auto update
       updateInterval = setInterval(() => {
         fetchWeather(currentCity);
       }, 10000);
     }
   </script>
-
 </body>
 </html>
