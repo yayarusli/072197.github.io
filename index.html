@@ -12,7 +12,6 @@
       background-color: #f7f9fc;
     }
 
-    /* Sidebar */
     .sidebar {
       display: flex;
       flex-direction: column;
@@ -22,9 +21,9 @@
       position: fixed;
       top: 0;
       left: 0;
-      background-color: #800020; /* Burgundy */
+      background-color: #800020;
       color: white;
-      padding-top: 60px;  /* beri ruang bawah header */
+      padding-top: 60px;
       padding-bottom: 20px;
       box-sizing: border-box;
     }
@@ -43,10 +42,21 @@
       z-index: 10;
     }
 
+    .profile-img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid white;
+      margin: 10px auto;
+      display: block;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
     .info {
       padding: 10px 20px;
       font-size: 14px;
-      flex-grow: 1; /* bagi ruang tengah */
+      flex-grow: 1;
     }
 
     .info p {
@@ -75,7 +85,6 @@
       transform: scale(1.05);
     }
 
-    /* Main Content */
     .main-content {
       margin-left: 260px;
       padding: 40px 20px;
@@ -127,10 +136,13 @@
 <div class="sidebar">
   <div class="header">👩‍💼 Husna</div>
 
+  <!-- Gambar profile -->
+  <img src="../images/husna.jpeg" alt="Profile Husna" class="profile-img" />
+
   <div class="info">
     <p><strong>Name:</strong> Nuraliah Husna Binti Rusli</p>
     <p><strong>Matric:</strong> BTLC22072197</p>
-    <p><strong>Course:</strong> Komputeran Internet</p>
+    <p><strong>Course:</strong> Computer Science(Internet Computing) With Honours</p>
     <p><strong>Email:</strong> nuraliahhusna.rusli@gmail.com</p>
     <p><strong>Phone:</strong> 011-61260741</p>
   </div>
@@ -156,7 +168,7 @@
 
     <div class="col-md-5">
       <div class="dashboard-box text-center">
-        <div class="dashboard-title">📰 News Insights</div>
+        <div class="dashboard-title">📰 Social Media Insights</div>
         <div class="dashboard-desc">Explore top trending news & topics in real-time.</div>
         <a href="news.html" class="btn open-btn">Click Me</a>
       </div>
