@@ -1,32 +1,29 @@
-// Fungsi utama untuk ambil berita berdasarkan input pengguna
 async function getNews() {
   const query = document.getElementById("newsSearch").value.trim();
   const container = document.getElementById("newsResults");
 
-  // Jika tiada input
   if (!query) {
     container.innerHTML = `<p style="color: red; text-align:center;">Please enter a search term.</p>`;
     return;
   }
 
-  // Paparkan loading
   container.innerHTML = `<p style="text-align:center;">Loading news articles...</p>`;
 
-  const apiKey = "70e87a45d7b24ef594b30a358741327d"; // Gantikan dengan API key anda jika perlu
+  const apiKey = "70e87a45d7b24ef594b30a358741327d";
   const newsApiUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&language=en&apiKey=${apiKey}&pageSize=9&sortBy=publishedAt`;
 
   try {
-    const response = await fetch(newsApiUrl);
+    const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(newsApiUrl)}`);
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
-    const data = await response.json();
+    const json = await response.json();
+    const data = JSON.parse(json.contents);
 
     if (!data.articles || data.articles.length === 0) {
       container.innerHTML = `<p style="text-align:center;">No articles found for "<strong>${query}</strong>".</p>`;
       return;
     }
 
-    // Bina HTML untuk senarai artikel
     const articlesHTML = data.articles.slice(0, 6).map(article => `
       <div class="card">
         <img src="${article.urlToImage || 'https://via.placeholder.com/150x100?text=No+Image'}" alt="Article Image" />
@@ -46,12 +43,4 @@ async function getNews() {
   }
 }
 
-// Bila butang diklik
 document.getElementById("searchBtn").addEventListener("click", getNews);
-
-// Bila tekan Enter dalam input
-document.getElementById("newsSearch").addEventListener("keydown", function (e) {
-  if (e.key === "Enter") {
-    getNews();
-  }
-});
