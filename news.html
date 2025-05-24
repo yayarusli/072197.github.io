@@ -8,12 +8,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet" />
   <style>
     body {
-      background-color: #8B1E3F;
-      font-family: 'Playfair Display', serif;
-      color: white;
+      background-color: #fce4ec;
+      font-family: 'Quicksand', sans-serif;
+      color: black;
+      padding-top: 70px;
     }
     .navbar {
-      background-color: #700d2c;
+      background-color: #800020;
+    }
+    .navbar-brand, .nav-link, .navbar-text {
+      color: white !important;
     }
     .container-box {
       background-color: white;
@@ -54,30 +58,41 @@
   </style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container-fluid justify-content-center">
-      <a class="navbar-brand fw-bold" href="#">News Dashboard</a>
-    </div>
-    <div class="container-fluid justify-content-center">
-      <ul class="navbar-nav">
-        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="news.html">News Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link" href="weather.html">Weather Dashboard</a></li>
-      </ul>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="#">UniSZA Dashboard</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="weather.html">Weather Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="news.html">News Dashboard</a></li>
+        </ul>
+        <span class="navbar-text fw-semibold">
+          Hi Husna!
+        </span>
+      </div>
     </div>
   </nav>
 
+  <!-- News Section -->
   <div class="container mt-5">
     <div class="container-box text-center">
-      <h2>Search News</h2>
+      <h2>📰 Search News</h2>
       <div class="d-flex justify-content-center mb-4">
         <input id="newsSearch" type="text" class="form-control w-50 me-2" placeholder="Search news topic..." />
-        <button id="searchBtn" class="btn btn-primary">Search News</button>
+        <button id="searchBtn" class="btn btn-warning text-dark fw-semibold">Search News</button>
       </div>
       <div id="newsResults"></div>
     </div>
   </div>
 
-  <script src="script2.js"></script>
+  <!-- Scripts -->
+  <script src="/js/script2.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
