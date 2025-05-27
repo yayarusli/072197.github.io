@@ -79,17 +79,64 @@
   <!-- News Section -->
   <div class="container mt-5">
     <div class="container-box text-center">
-      <h2>📰 Search News</h2>
-      <div class="d-flex justify-content-center mb-4">
+      <h2 style="color: #800020;">📰 Search News</h2>
+
+      <!-- Form to support Enter key -->
+      <form class="d-flex justify-content-center mb-4" onsubmit="searchNews(); return false;">
         <input id="newsSearch" type="text" class="form-control w-50 me-2" placeholder="Search news topic..." />
-         <button class="btn btn-primary mt-3" onclick="searchWeather()">Search</button>
-      </div>
+        <button type="submit" class="btn btn-primary mt-3">Search</button>
+      </form>
+
       <div id="newsResults"></div>
     </div>
   </div>
 
-  <!-- Scripts -->
-  <script src="script2.js"></script>
+  <!-- Script for news search -->
+  <script>
+    const apiKey = "YOUR_NEWSAPI_KEY"; // Replace with your NewsAPI key
+
+    function searchNews() {
+      const query = document.getElementById("newsSearch").value.trim();
+      if (!query) return alert("Please enter a topic to search.");
+
+      const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&sortBy=publishedAt&language=en&pageSize=10&apiKey=${apiKey}`;
+
+      fetch(url)
+        .then((response) => {
+          if (!response.ok) throw new Error("Failed to fetch news.");
+          return response.json();
+        })
+        .then((data) => {
+          const resultsContainer = document.getElementById("newsResults");
+          resultsContainer.innerHTML = "";
+
+          if (data.articles.length === 0) {
+            resultsContainer.innerHTML = "<p>No news found.</p>";
+            return;
+          }
+
+          data.articles.forEach((article) => {
+            const card = document.createElement("div");
+            card.className = "card";
+
+            card.innerHTML = `
+              <img src="${article.urlToImage || 'https://via.placeholder.com/150'}" alt="News Image" />
+              <div class="card-content">
+                <h5>${article.title}</h5>
+                <p>${article.description || ''}</p>
+                <a href="${article.url}" target="_blank">Read more</a>
+              </div>
+            `;
+
+            resultsContainer.appendChild(card);
+          });
+        })
+        .catch((error) => {
+          alert("Error: " + error.message);
+        });
+    }
+  </script>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
